@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Translator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🌐 AI-Powered Multilingual Content Localization Engine</h1>
+
+    <form method="POST">
+
+        <label>Enter Text</label>
+        <textarea name="text" rows="6" required></textarea>
+
+        <label>Select Language</label>
+
+        <select name="language">
+            <option>Tamil</option>
+            <option>English</option>
+            <option>Hindi</option>
+            <option>Telugu</option>
+        </select>
+
+        <button type="submit">Translate</button>
+
+    </form>
+
+    {% if result %}
+    <div class="result">
+        <h3>Translated Text</h3>
+        <p>{{ result }}</p>
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

@@ -13,17 +13,28 @@
 
     <form method="POST">
 
-        <label>Enter Text</label>
+        <label>Enter Text</label><br>
         <textarea name="text" rows="6" required></textarea>
 
-        <label>Select Language</label>
+        <br><br>
 
-        <select name="language">
-            <option>Tamil</option>
-            <option>English</option>
-            <option>Hindi</option>
-            <option>Telugu</option>
+        <button type="button" onclick="startSpeech()">🎤 Speak</button>
+
+        <br><br>
+
+        <label>Select Language</label><br>
+
+        <select name="language" id="language">
+            <option value="Tamil">Tamil</option>
+            <option value="English">English</option>
+            <option value="Hindi">Hindi</option>
+            <option value="Telugu">Telugu</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Korean">Korean</option>
+            <option value="Malayalam">Malayalam</option>
         </select>
+
+        <br><br>
 
         <button type="submit">Translate</button>
 
@@ -31,12 +42,74 @@
 
     {% if result %}
     <div class="result">
+
         <h3>Translated Text</h3>
+
         <p>{{ result }}</p>
+
+        <br>
+
+        <audio controls autoplay>
+            <source src="{{ url_for('static', filename='output.mp3') }}?v={{ range(1,999999)|random }}" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
     </div>
     {% endif %}
 
 </div>
 
+<script>
+
+function startSpeech() {
+
+    const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        alert("Speech Recognition is not supported in this browser.");
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+
+    let language = document.getElementById("language").value;
+
+    if (language === "Tamil") {
+        recognition.lang = "ta-IN";
+    }
+    else if (language === "English") {
+        recognition.lang = "en-US";
+    }
+    else if (language === "Hindi") {
+        recognition.lang = "hi-IN";
+    }
+    else if (language === "Telugu") {
+        recognition.lang = "te-IN";
+    }
+    else if (language === "Japanese") {
+        recognition.lang = "ja-JP";
+    }
+    else if (language === "Korean") {
+        recognition.lang = "ko-KR";
+    }
+    else if (language === "Malayalam") {
+        recognition.lang = "ml-IN";
+    }
+
+    recognition.start();
+
+    recognition.onresult = function(event) {
+        document.querySelector("textarea").value =
+            event.results[0][0].transcript;
+    };
+
+    recognition.onerror = function(event) {
+        alert("Error : " + event.error);
+    };
+
+}
+
+</script>
 </body>
 </html>
